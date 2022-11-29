@@ -30,10 +30,10 @@ public class MainRun extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/authentication.fxml"));
         AnchorPane root = fxmlLoader.load();
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1200, 800);
 
-        AuthenticationController authenticationController =fxmlLoader.getController();
-        authenticationController.init(service);
+        AuthenticationController authenticationController = fxmlLoader.getController();
+        authenticationController.init(service,null);
 
         stage.setTitle("Hello, this is my Social network app!");
         stage.setScene(scene);

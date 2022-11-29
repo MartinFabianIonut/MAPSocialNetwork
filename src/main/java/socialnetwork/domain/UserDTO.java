@@ -5,9 +5,9 @@ import java.util.List;
 public class UserDTO extends Entity<Long> {
     private String idd;
     private String name;
-    private List<Long>friends;
+    private List<String>friends;
 
-    public UserDTO(String id, String name, List<Long> friends) {
+    public UserDTO(String id, String name, List<String> friends) {
         this.idd = id;
         this.name = name;
         this.friends = friends;
@@ -29,11 +29,11 @@ public class UserDTO extends Entity<Long> {
         this.name = name;
     }
 
-    public List<Long> getFriends() {
+    public List<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<Long> friends) {
+    public void setFriends(List<String> friends) {
         this.friends = friends;
     }
 

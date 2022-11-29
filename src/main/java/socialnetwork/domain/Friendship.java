@@ -69,8 +69,8 @@ public class Friendship extends Entity<Long> {
         return "Friend{" +
                 "id='" + getId() + '\'' +
                 ", date='" + getDate() + '\'' +
-                ", firstFriend='" + getFirstFriendId() + '\'' +
-                ", secondFriend='" + getSecondFriendId() + '\'' +
+                ", firstFriend='" + firstFriend.getLastName() + " " + firstFriend.getFirstName() + '\'' +
+                ", secondFriend='" + secondFriend.getLastName() + " " + secondFriend.getFirstName() + '\'' +
                 '}';
     }
 

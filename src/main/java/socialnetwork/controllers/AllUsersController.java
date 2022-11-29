@@ -42,17 +42,13 @@ public class AllUsersController extends AbstractController {
         tableViewUsers.setItems(modelGrade);
     }
 
-    private List<UserDTO> getAllUsersList(){
-        Iterable<User> list =  service.getAllUsers();
-        List<UserDTO> users = StreamSupport.stream(list.spliterator(), false)
-                .map(u -> new UserDTO(u.getId().toString(), u.getLastName()+ " "+u.getFirstName(), u.getFriendsIds()))
-                .collect(Collectors.toList());
-        return users;
-    }
-
-    public void setService(NetworkService service){
-        this.service = service;
+    public void setService(NetworkService service, User user){
+        super.init(service,user);
         modelGrade.setAll(getAllUsersList());
     }
 
+    @Override
+    public void update() {
+        modelGrade.setAll(getAllUsersList());
+    }
 }

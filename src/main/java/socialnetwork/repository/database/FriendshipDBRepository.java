@@ -62,7 +62,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Long,Friendship
      */
     @Override
     protected void addToDatabase(Friendship entity) {
-        String sql = "INSERT INTO friendships (id,firstfriend, secondfriend,date) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO friendships (id,firstfriend, secondfriend,date,status) VALUES (?,?,?,?,?)";
         try(Connection connection = DriverManager.getConnection(url,userName, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1,entity.getId().intValue());
@@ -71,6 +71,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Long,Friendship
             ps.setString(4,date);
             ps.setInt(2,entity.getFirstFriend().getId().intValue());
             ps.setInt(3,entity.getSecondFriend().getId().intValue());
+            ps.setString(5,entity.getStatus());
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -102,9 +103,10 @@ public class FriendshipDBRepository extends AbstractDBRepository<Long,Friendship
         int id = entity.getId().intValue();
         LocalDateTime localDateTime = entity.getDate();
         String date = localDateTime.toString();
-        String sql = "UPDATE friendships SET date="+date+"" +
-                ", firstfriend ="+ entity.getFirstFriend().getId().intValue()+
-                ", secondfriend = "+entity.getSecondFriend().getId().intValue()+" WHERE id="+id;
+        String sql = "UPDATE friendships SET date='"+date +
+                "', firstfriend ="+ entity.getFirstFriend().getId().intValue()+
+                ", secondfriend = "+entity.getSecondFriend().getId().intValue()+
+                ", status = '"+entity.getStatus() + "' WHERE id="+id;
         try(Connection connection = DriverManager.getConnection(url,userName, password);
             PreparedStatement ps = connection.prepareStatement(sql)){
             ps.executeUpdate();

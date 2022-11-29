@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,31 +9,50 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.UserController">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.UserController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="287.0" layoutX="67.0" layoutY="68.0" stroke="BLACK" strokeType="INSIDE" width="465.0" />
-      <Text fill="#631eeb" layoutX="129.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="670.0" layoutX="65.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" width="1070.0" />
+      <TableView fx:id="tableMyFriends" layoutX="90.0" layoutY="90.0" onMouseClicked="#showUserTableMyFriends" prefHeight="619.0" prefWidth="826.0">
+        <columns>
+          <TableColumn fx:id="friendWith" prefWidth="385.0" text="Friend with" />
+          <TableColumn fx:id="friendFrom" prefWidth="439.0" text="From" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableAllUsers" layoutX="90.0" layoutY="90.0" onMouseClicked="#showUserTableAllUsers" prefHeight="619.0" prefWidth="826.0">
+        <columns>
+          <TableColumn fx:id="userName" prefWidth="825.0" text="User name" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableFriendRequests" layoutX="90.0" layoutY="90.0" onMouseClicked="#showUserTableFriendRequests" prefHeight="619.0" prefWidth="826.0">
+        <columns>
+          <TableColumn fx:id="sendByMe" prefWidth="405.0" text="Send by me to" />
+          <TableColumn fx:id="receivedByMe" prefWidth="420.0" text="Received by me from" />
+        </columns>
+      </TableView>
+      <Text fill="#631eeb" layoutX="429.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
          <font>
             <Font name="Georgia Bold Italic" size="28.0" />
          </font>
       </Text>
-      <ComboBox layoutX="363.0" layoutY="89.0" prefWidth="150.0" promptText="Options" />
-      <TableView fx:id="tableMyFriends" layoutX="92.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0">
-        <columns>
-          <TableColumn fx:id="friendWith" prefWidth="121.0" text="Friend with" />
-          <TableColumn fx:id="friendFrom" prefWidth="78.0" text="From" />
-        </columns>
-      </TableView>
-      <TableView fx:id="tableAllUsers" layoutX="92.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0">
-        <columns>
-          <TableColumn fx:id="userName" prefWidth="199.0" text="User name" />
-        </columns>
-      </TableView>
-      <TableView fx:id="tableFriendRequests" layoutX="92.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0">
-        <columns>
-          <TableColumn fx:id="sendByMe" prefWidth="100.0" text="Send by me" />
-          <TableColumn fx:id="receivedByMe" prefWidth="99.0" text="Received by me" />
-        </columns>
-      </TableView>
+      <ComboBox fx:id="comboBoxOptions" layoutX="975.0" layoutY="89.0" prefHeight="32.0" prefWidth="124.0" promptText="Options" />
+      <Text fill="WHITE" layoutX="972.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected user:">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="showSelectedUser" layoutX="972.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
+         <font>
+            <Font name="Georgia Bold" size="15.0" />
+         </font>
+      </Text>
+      <Button fx:id="deleteFriendButton" layoutX="994.0" layoutY="388.0" mnemonicParsing="false" onAction="#deleteFriend" text="Delete friend" />
+      <Button fx:id="acceptFriendshipButton" layoutX="975.0" layoutY="166.0" mnemonicParsing="false" onAction="#acceptFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Accept friendship" />
+      <Button fx:id="addFriendButton" layoutX="994.0" layoutY="426.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="25.0" prefWidth="85.0" text="Add friend" />
+      <Text fx:id="showResult" layoutX="972.0" layoutY="488.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
+         <font>
+            <Font name="Georgia Italic" size="15.0" />
+         </font>
+      </Text>
+      <Button fx:id="refuseFriendshipButton" layoutX="975.0" layoutY="201.0" mnemonicParsing="false" onAction="#refuseFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Refuse friendship" />
    </children>
 </AnchorPane>
