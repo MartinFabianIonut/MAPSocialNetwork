@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class Entity<ID> implements Serializable {
 
     private static final long serialVersionUID = 7331115341259248461L;
-    private ID id;
+    private ID id2;
 
     public ID getId() {
-        return id;
+        return id2;
     }
 
     public void setId(ID id) {
-        this.id = id;
+        this.id2 = id;
     }
 }

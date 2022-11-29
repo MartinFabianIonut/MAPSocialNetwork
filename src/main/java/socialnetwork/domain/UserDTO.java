@@ -1,9 +1,6 @@
 package socialnetwork.domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class UserDTO extends Entity<Long> {
     private String idd;
