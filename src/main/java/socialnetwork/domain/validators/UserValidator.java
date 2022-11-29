@@ -5,7 +5,7 @@ import socialnetwork.domain.exceptions.ValidationException;
 
 import java.util.Objects;
 
-public class UtilizatorValidator implements Validator<User> {
+public class UserValidator implements Validator<User> {
     @Override
     public void validate(User entity) throws ValidationException {
         String error = "";

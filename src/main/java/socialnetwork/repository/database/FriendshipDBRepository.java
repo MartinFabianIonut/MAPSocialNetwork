@@ -40,12 +40,13 @@ public class FriendshipDBRepository extends AbstractDBRepository<Long,Friendship
                 Long firstfriend = resultSet.getLong("firstfriend");
                 Long secondfriend = resultSet.getLong("secondfriend");
                 String date = resultSet.getString("date");
+                String status = resultSet.getString("status");
                 User u1 = userDBRepository.findOne(firstfriend);
                 User u2 = userDBRepository.findOne(secondfriend);
                 u1.getFriends().add(u2);
                 u2.getFriends().add(u1);
                 LocalDateTime dateTime = LocalDateTime.parse(date);
-                Friendship newFriendship = new Friendship(dateTime,u1, u2);
+                Friendship newFriendship = new Friendship(dateTime,u1, u2, status);
                 newFriendship.setId(id);
                 friendships.add(newFriendship);
             }

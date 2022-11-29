@@ -21,17 +21,20 @@ public class Friendship extends Entity<Long> {
     private final LocalDateTime date;
     private final User firstFriend;
     private final User secondFriend;
+    private String status;
 
     public Friendship(User firstFriend, User secondFriend) {
+        status = "pending";
         date = LocalDateTime.now();
         this.firstFriend = firstFriend;
         this.secondFriend = secondFriend;
     }
 
-    public Friendship(LocalDateTime date, User firstFriend, User secondFriend) {
+    public Friendship(LocalDateTime date, User firstFriend, User secondFriend, String status) {
         this.date = date;
         this.firstFriend = firstFriend;
         this.secondFriend = secondFriend;
+        this.status = status;
     }
 
     public User getFirstFriend() {
@@ -54,6 +57,13 @@ public class Friendship extends Entity<Long> {
         return date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status){
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Friend{" +
@@ -67,11 +77,10 @@ public class Friendship extends Entity<Long> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Friendship)) return false;
-        Friendship that = (Friendship) o;
+        if (!(o instanceof Friendship that)) return false;
         return getDate().equals(that.getDate()) &&
-                getFirstFriendId() == that.getFirstFriendId() &&
-                getSecondFriendId() == that.getSecondFriendId();
+                Objects.equals(getFirstFriendId(), that.getFirstFriendId()) &&
+                Objects.equals(getSecondFriendId(), that.getSecondFriendId());
     }
 
     @Override

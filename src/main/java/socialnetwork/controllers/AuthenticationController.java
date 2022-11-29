@@ -25,6 +25,9 @@ public class AuthenticationController extends AbstractController {
         AllUsersController controller = loader.getController();
         controller.setService(service);
 
+        Stage previousStage = (Stage) adminButton.getScene().getWindow();
+        previousStage.close();
+
         Stage stage = new Stage();
         stage.setScene(new Scene(root, 600, 400));
         stage.setTitle("Admin window");
@@ -32,7 +35,22 @@ public class AuthenticationController extends AbstractController {
     }
 
     @FXML
-    public void userPage(){
+    public void userPage() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/logInView.fxml"));
+        AnchorPane root = loader.load();
+
+        LogInController controller = loader.getController();
+        controller.init(service);
+
+        Stage previousStage = (Stage) userButton.getScene().getWindow();
+        previousStage.close();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setTitle("Admin window");
+        stage.show();
+
 
     }
 
