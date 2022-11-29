@@ -21,7 +21,6 @@ public class AllUsersController extends AbstractController {
 
     ObservableList<UserDTO> modelGrade = FXCollections.observableArrayList();
     //List<String> modelTema;
-    //private NetworkService service;
 
 
     @FXML
