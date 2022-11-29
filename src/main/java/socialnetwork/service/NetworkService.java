@@ -36,20 +36,39 @@ public class NetworkService {
         return repoUsers.findAll();
     }
 
+    public User findByName(String name) throws RepoException{
+        Iterable<User> allUsers = getAllUsers();
+        User user = null;
+        for(User u: allUsers){
+            if((u.getLastName() + " " + u.getFirstName()).equals(name))
+            {
+                user = repoUsers.findOne(u.getId());
+                break;
+            }
+        }
+        return user;
+        //throw new RepoException("Non existing user!");
+    }
+
     /**
      * @param lastName  is the last name of a new user to add to memory, String type,
      *                  if "", validator will throw exception, which will go in cascade
      * @param firstName is the first name of a new user to add to memory, String type,
      *                  if "", validator will throw exception, which will go in cascade
      */
-    public void addUser(String lastName, String firstName) {
+    public void addUser(String lastName, String firstName) throws RepoException {
         User user = new User(lastName, firstName);
         Iterable<User> users = repoUsers.findAll();
         Long maxi = 0L;
+        boolean exist = false;
         for (User u : users) {
             if (u.getId() > maxi)
                 maxi = u.getId();
+            if(Objects.equals(u.getLastName(), lastName) && Objects.equals(u.getFirstName(), firstName))
+                exist = true;
         }
+        if(exist)
+            throw new RepoException("This user already exists");
         user.setId(maxi + 1);
         validatorUser.validate(user);
         repoUsers.save(user);
