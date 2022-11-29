@@ -2,7 +2,7 @@ package socialnetwork.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class LogInController {
+public class LogInController extends AbstractController{
     @FXML
     Button signUpButton;
     @FXML

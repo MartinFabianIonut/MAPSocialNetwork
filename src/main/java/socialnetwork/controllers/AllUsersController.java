@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class AllUsersController {
+public class AllUsersController extends AbstractController {
 
     ObservableList<UserDTO> modelGrade = FXCollections.observableArrayList();
     //List<String> modelTema;
-    private NetworkService service;
+    //private NetworkService service;
 
 
     @FXML
