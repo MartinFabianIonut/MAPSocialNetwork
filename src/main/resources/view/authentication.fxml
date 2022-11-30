@@ -20,24 +20,24 @@
             <Font name="Georgia Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="adminButton" layoutX="396.0" layoutY="400.0" mnemonicParsing="false" onAction="#adminPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="ADMIN">
+      <Button fx:id="adminButton" layoutX="396.0" layoutY="400.0" mnemonicParsing="false" onAction="#adminPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="ADMIN" textFill="WHITE">
          <font>
-            <Font name="Georgia" size="20.0" />
+            <Font name="Georgia Bold" size="20.0" />
          </font></Button>
       <Text fill="#7400e8" layoutX="505.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Continue as:" wrappingWidth="190.04296875">
          <font>
             <Font name="Georgia Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="userButton" layoutX="695.0" layoutY="400.0" mnemonicParsing="false" onAction="#userPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="USER">
+      <Button fx:id="userButton" layoutX="695.0" layoutY="400.0" mnemonicParsing="false" onAction="#userPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="USER" textFill="WHITE">
          <font>
-            <Font name="Georgia" size="20.0" />
+            <Font name="Georgia Bold" size="20.0" />
          </font></Button>
       <Button fx:id="submitAdminAccess" layoutX="867.0" layoutY="568.0" mnemonicParsing="false" onAction="#giveAdminAccess" prefHeight="25.0" prefWidth="100.0" text="Submit" />
       <Text fx:id="passwordAdminAccess" fill="#7400e8" layoutX="132.0" layoutY="588.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="563.0">
          <font>
             <Font name="Georgia Bold Italic" size="22.0" />
          </font></Text>
-      <PasswordField fx:id="passwordAdminField" layoutX="714.0" layoutY="568.0" prefHeight="25.0" prefWidth="131.0" />
+      <PasswordField fx:id="passwordAdminField" layoutX="714.0" layoutY="568.0" onAction="#giveAdminAccess" prefHeight="25.0" prefWidth="131.0" />
    </children>
 </AnchorPane>

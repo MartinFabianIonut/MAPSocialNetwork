@@ -20,7 +20,7 @@
             <Font name="Georgia Bold" size="24.0" />
          </font>
       </Text>
-      <TextField fx:id="nameField" layoutX="422.0" layoutY="252.0" prefHeight="54.0" prefWidth="256.0" promptText="Enter your name (lastname + &quot; &quot; + firstname):" />
+      <TextField fx:id="nameField" layoutX="422.0" layoutY="252.0" onAction="#logIn" prefHeight="54.0" prefWidth="256.0" promptText="Enter your name (lastname + &quot; &quot; + firstname):" />
       <Button fx:id="logInButton" layoutX="743.0" layoutY="252.0" mnemonicParsing="false" onAction="#logIn" prefHeight="54.0" prefWidth="93.0" style="-fx-background-color: #82CAFF;" text="Log In">
          <font>
             <Font name="Georgia" size="17.0" />
@@ -39,5 +39,6 @@
             <Font name="Georgia" size="12.0" />
          </font>
       </Text>
+      <Button fx:id="signOutButton" layoutX="90.0" layoutY="87.0" mnemonicParsing="false" onAction="#signOutAction" text="&lt;- Back" />
    </children>
 </AnchorPane>

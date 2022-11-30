@@ -263,12 +263,6 @@ public class NetworkService implements Observable {
     public void addObserver(Observer e) {
         observers.add(e);
     }
-
-    @Override
-    public void removeObserver(Observer e) {
-        observers.remove(e);
-    }
-
     @Override
     public void notifyObservers() {
         observers.forEach(Observer::update);

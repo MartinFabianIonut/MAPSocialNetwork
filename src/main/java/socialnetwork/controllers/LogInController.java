@@ -12,10 +12,7 @@ import java.io.IOException;
 
 public class LogInController extends AbstractController{
     @FXML
-    Button signUpButton;
-    @FXML
-    Button logInButton;
-
+    Button signUpButton, logInButton, signOutButton;
     @FXML
     TextField nameField;
 
@@ -48,8 +45,12 @@ public class LogInController extends AbstractController{
     public void signUp() {
     }
 
-    @Override
-    public void update() {
-
+    @FXML
+    public void signOutAction() throws IOException {
+        Stage previousStage = (Stage) signOutButton.getScene().getWindow();
+        super.signOutAction(previousStage);
     }
+
+    @Override
+    public void update() {}
 }

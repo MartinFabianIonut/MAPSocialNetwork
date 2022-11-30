@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -19,8 +21,30 @@
         <columns>
           <TableColumn fx:id="tableColumnId" prefWidth="58.0" text="Id User" />
           <TableColumn fx:id="tableColumnName" prefWidth="269.0" text="User Name" />
-            <TableColumn fx:id="tableColumnFriends" prefWidth="498.0" text="Friends" />
+            <TableColumn fx:id="tableColumnFriends" prefWidth="493.0" text="Friends" />
         </columns>
       </TableView>
+      <Button fx:id="signOutButton" layoutX="994.0" layoutY="679.0" mnemonicParsing="false" onAction="#signOutAction" text="Sign out" />
+      <Text fill="WHITE" layoutX="942.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Control panel" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia Bold" size="23.0" />
+         </font>
+      </Text>
+      <TextField fx:id="firstNameField" layoutX="959.0" layoutY="228.0" />
+      <TextField fx:id="lastNameField" layoutX="959.0" layoutY="145.0" />
+      <Text fill="WHITE" layoutX="950.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last name:" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia" size="21.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="950.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First name:" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia" size="21.0" />
+         </font>
+      </Text>
+      <Button fx:id="addUserButton" layoutX="992.0" layoutY="300.0" mnemonicParsing="false" onAction="#addUserAction" text="Add user" />
+      <Button fx:id="deleteUserButton" layoutX="985.0" layoutY="347.0" mnemonicParsing="false" onAction="#deleteUserAction" text="Delete user" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d4eaff" height="186.0" layoutX="934.0" layoutY="489.0" stroke="BLACK" strokeType="INSIDE" width="185.0" />
+      <Text fx:id="controlPanel" layoutX="946.0" layoutY="511.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="158.9830722808838" />
    </children>
 </AnchorPane>

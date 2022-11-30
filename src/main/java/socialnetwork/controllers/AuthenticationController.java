@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,19 +14,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class AuthenticationController extends AbstractController {
-
     @FXML
-    Button userButton;
-
-    @FXML
-    Button adminButton;
-
-    @FXML
-    Button submitAdminAccess;
-
+    Button userButton, adminButton, submitAdminAccess;
     @FXML
     Text passwordAdminAccess;
-
     @FXML
     PasswordField passwordAdminField;
 
@@ -59,6 +49,8 @@ public class AuthenticationController extends AbstractController {
         }
         else {
             passwordAdminAccess.setText("Access denied!");
+
+            //lastNameField Last name: deleteUserButton
         }
     }
     @FXML
@@ -84,12 +76,8 @@ public class AuthenticationController extends AbstractController {
         stage.setScene(new Scene(root, 1200, 800));
         stage.setTitle("User window");
         stage.show();
-
-
     }
 
     @Override
-    public void update() {
-
-    }
+    public void update() {}
 }

@@ -3,12 +3,16 @@ package socialnetwork.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import socialnetwork.domain.Friendship;
 import socialnetwork.domain.FriendshipDTO;
 import socialnetwork.domain.User;
@@ -16,6 +20,7 @@ import socialnetwork.domain.UserDTO;
 import socialnetwork.domain.exceptions.RepoException;
 import socialnetwork.service.NetworkService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,9 +36,7 @@ public class UserController extends AbstractController{
     @FXML
     TableView<FriendshipDTO> tableMyFriends;
     @FXML
-    TableColumn<FriendshipDTO,String> friendWith;
-    @FXML
-    TableColumn<FriendshipDTO, String> friendFrom;
+    TableColumn<FriendshipDTO,String> friendWith, friendFrom;
     /*----------------------------------------*/
     @FXML
     TableView<UserDTO> tableAllUsers;
@@ -43,24 +46,17 @@ public class UserController extends AbstractController{
     @FXML
     TableView<FriendshipDTO> tableFriendRequests;
     @FXML
-    TableColumn<FriendshipDTO,String> sendByMe;
-    @FXML
-    TableColumn<FriendshipDTO,String> receivedByMe;
+    TableColumn<FriendshipDTO,String> sendByMe, receivedByMe;
     /*----------------------------------------*/
     @FXML
     ComboBox<String> comboBoxOptions;
     /*----------------------------------------*/
     @FXML
-    Button deleteFriendButton;
-    @FXML
-    Button addFriendButton;
-    @FXML
-    Button acceptFriendshipButton, refuseFriendshipButton;
+    Button deleteFriendButton, addFriendButton, acceptFriendshipButton,
+            refuseFriendshipButton, signOutButton, deleteAccountButton;
     /*----------------------------------------*/
     @FXML
-    Text showSelectedUser;
-    @FXML
-    Text showResult;
+    Text showSelectedUser, showResult;
 
     @FXML
     public void initialize(){
@@ -120,14 +116,12 @@ public class UserController extends AbstractController{
                 .filter((x) -> (Objects.equals(x.getFirstFriendId(), currentUser.getId())
                         && Objects.equals(x.getStatus(), "accepted")))
                 .map(f -> new FriendshipDTO(f.getDate().toString(),
-                        f.getSecondFriend().getLastName() + " " + f.getSecondFriend().getFirstName(),null,null))
-                .collect(Collectors.toList());
+                        f.getSecondFriend().getLastName() + " " + f.getSecondFriend().getFirstName(), null, null)).toList();
         List<FriendshipDTO> friendshipDTOList2 = StreamSupport.stream(list.spliterator(), false)
                 .filter((x) -> (Objects.equals(x.getSecondFriendId(), currentUser.getId())
                         && Objects.equals(x.getStatus(), "accepted")))
                 .map(f -> new FriendshipDTO(f.getDate().toString(),
-                        f.getFirstFriend().getLastName() + " " + f.getFirstFriend().getFirstName(),null,null))
-                .collect(Collectors.toList());
+                        f.getFirstFriend().getLastName() + " " + f.getFirstFriend().getFirstName(), null, null)).toList();
         List<FriendshipDTO> friendshipDTOListf = new ArrayList<>();
         friendshipDTOListf.addAll(friendshipDTOList);
         friendshipDTOListf.addAll(friendshipDTOList2);
@@ -138,27 +132,25 @@ public class UserController extends AbstractController{
         Iterable<Friendship> list =  service.getAllFriendships();
         List<String> sendByMe = StreamSupport.stream(list.spliterator(), false)
                 .filter((x) -> (Objects.equals(x.getFirstFriendId(), currentUser.getId())))
-                .map(f ->  f.getSecondFriend().getLastName()+" "+f.getSecondFriend().getFirstName()+"; "+
-                        "in: "+ f.getDate().toString() + "; status = "+f.getStatus())
-                .collect(Collectors.toList());
+                .map(f -> f.getSecondFriend().getLastName() + " " + f.getSecondFriend().getFirstName() + "; " +
+                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
         List<String> receivedByMe = StreamSupport.stream(list.spliterator(), false)
                 .filter((x) -> (Objects.equals(x.getSecondFriendId(), currentUser.getId())))
-                .map(f ->  f.getFirstFriend().getLastName()+" "+f.getFirstFriend().getFirstName()+"; "+
-                        "in: "+ f.getDate().toString() + "; status = "+f.getStatus())
-                .collect(Collectors.toList());
+                .map(f -> f.getFirstFriend().getLastName() + " " + f.getFirstFriend().getFirstName() + "; " +
+                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
         Iterator<String> i1 = sendByMe.iterator();
         Iterator<String> i2 = receivedByMe.iterator();
-        List<FriendshipDTO> friendshipDTOListf = new ArrayList<>();
+        List<FriendshipDTO> friendshipsRequests = new ArrayList<>();
         while(i1.hasNext() && i2.hasNext()){
-            friendshipDTOListf.add(new FriendshipDTO(i1.next(),i2.next()));
+            friendshipsRequests.add(new FriendshipDTO(i1.next(),i2.next()));
         }
         while(i1.hasNext()){
-            friendshipDTOListf.add(new FriendshipDTO(i1.next(),""));
+            friendshipsRequests.add(new FriendshipDTO(i1.next(),""));
         }
         while(i2.hasNext()){
-            friendshipDTOListf.add(new FriendshipDTO("",i2.next()));
+            friendshipsRequests.add(new FriendshipDTO("",i2.next()));
         }
-        return friendshipDTOListf;
+        return friendshipsRequests;
     }
 
     public void setService(NetworkService service, User user){
@@ -243,6 +235,21 @@ public class UserController extends AbstractController{
         }
     }
 
+    @FXML
+    public void signOutAction() throws IOException {
+        Stage previousStage = (Stage) signOutButton.getScene().getWindow();
+        super.signOutAction(previousStage);
+    }
+
+    @FXML
+    public void deleteAccountAction(){
+        try{
+            service.deleteUser(currentUser.getId());
+            signOutAction();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public void update() {
         modelGradeUserDTO.setAll(getAllUsersList());
