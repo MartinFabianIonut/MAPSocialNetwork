@@ -10,6 +10,7 @@ import socialnetwork.observer.Observable;
 import socialnetwork.observer.Observer;
 import socialnetwork.repository.Repository0;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class NetworkService implements Observable {
@@ -117,14 +118,24 @@ public class NetworkService implements Observable {
      * @param id2 id of second user, I want to add friendship between him and first user, identified by id1
      * @throws RepoException if they were already friends or if same person
      */
-    public void addFriendship(Long id1, Long id2) throws RepoException, ValidationException {
+    public void addFriendship(Long id1, Long id2, boolean admin) throws RepoException, ValidationException {
         User[] users = getTwoUsersById(id1, id2);
         User u1 = users[0];
         User u2 = users[1];
         if (u1 != u2) {
             if (alreadyFriends(u1, u2))
-                throw new RepoException(u1 + " is already a friend of " + u2 + "!");
-            Friendship friendship = new Friendship(u1, u2);
+                if(!admin)
+                    throw new RepoException(u1 + " is already a friend of " + u2 + "!");
+                else
+                {
+                    acceptFriendship(u2,u1);
+                    return;
+                }
+            Friendship friendship;
+            if(admin)
+                friendship = new Friendship(LocalDateTime.now(),u1,u2,"accepted");
+            else
+                friendship = new Friendship(u1, u2);
             validatorFriendship.validate(friendship);
             Iterable<Friendship> friendships = repoFriendships.findAll();
             Long maxi = 0L;
@@ -134,10 +145,12 @@ public class NetworkService implements Observable {
             }
             friendship.setId(maxi + 1);
             repoFriendships.save(friendship);
+
             u1.getFriends().add(u2);
             u2.getFriends().add(u1);
             repoUsers.update(u1);
             repoUsers.update(u2);
+
             notifyObservers();
         } else {
             throw new RepoException("Same user, no efect!");
@@ -168,6 +181,7 @@ public class NetworkService implements Observable {
                 } else {
                     deleteFriendship(u1.getId(),u2.getId());
                     notifyObservers();
+                    break;
                 }
             }
         }

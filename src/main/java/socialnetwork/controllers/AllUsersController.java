@@ -3,30 +3,43 @@ package socialnetwork.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import socialnetwork.domain.Friendship;
+import socialnetwork.domain.FriendshipDTO;
 import socialnetwork.domain.User;
 import socialnetwork.domain.UserDTO;
 import socialnetwork.domain.exceptions.RepoException;
 import socialnetwork.service.NetworkService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 public class AllUsersController extends AbstractController {
     ObservableList<UserDTO> modelGrade = FXCollections.observableArrayList();
+    ObservableList<FriendshipDTO> modelGradeFriendshipDTORequests = FXCollections.observableArrayList();
     @FXML
     TableView<UserDTO>tableViewUsers;
     @FXML
     TableColumn<UserDTO, String>tableColumnId, tableColumnName, tableColumnFriends;
+
     @FXML
-    Button signOutButton, addUserButton, deleteUserButton;
+    TableView<FriendshipDTO> tableFriendRequests;
+    @FXML
+    TableColumn<FriendshipDTO,String> sendByMe, receivedByMe;
+
+    @FXML
+    ComboBox<String> userComboBox;
+
+    @FXML
+    Button signOutButton, addUserButton, deleteUserButton,deleteFriendButton,addFriendButton;
     @FXML
     Text controlPanel;
     @FXML
@@ -38,11 +51,59 @@ public class AllUsersController extends AbstractController {
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnFriends.setCellValueFactory(new PropertyValueFactory<>("friends"));
         tableViewUsers.setItems(modelGrade);
+
+        sendByMe.setCellValueFactory(new PropertyValueFactory<>("sendByMe"));
+        receivedByMe.setCellValueFactory(new PropertyValueFactory<>("receivedByMe"));
+        tableFriendRequests.setItems(modelGradeFriendshipDTORequests);
+
+        userComboBox.getSelectionModel().selectedItemProperty().addListener(
+                (x,y,z)->handleFilter()
+        );
+    }
+
+    private void handleFilter(){
+        String selectedItem = userComboBox.getSelectionModel().getSelectedItem();
+        if(selectedItem!=null)
+            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+    }
+
+    private List<FriendshipDTO> getAllFriendshipRequests(){
+        Iterable<Friendship> list =  service.getAllFriendships();
+        User selectedUser = service.findByName(userComboBox.getSelectionModel().getSelectedItem());
+        if(selectedUser==null)
+            return null;
+        List<String> sendByMe = StreamSupport.stream(list.spliterator(), false)
+                .filter((x) -> (Objects.equals(x.getFirstFriendId(), selectedUser.getId())))
+                .map(f -> f.getSecondFriend().getLastName() + " " + f.getSecondFriend().getFirstName() + "; " +
+                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
+        List<String> receivedByMe = StreamSupport.stream(list.spliterator(), false)
+                .filter((x) -> (Objects.equals(x.getSecondFriendId(), selectedUser.getId())))
+                .map(f -> f.getFirstFriend().getLastName() + " " + f.getFirstFriend().getFirstName() + "; " +
+                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
+        Iterator<String> i1 = sendByMe.iterator();
+        Iterator<String> i2 = receivedByMe.iterator();
+        List<FriendshipDTO> friendshipsRequests = new ArrayList<>();
+        while(i1.hasNext() && i2.hasNext()){
+            friendshipsRequests.add(new FriendshipDTO(i1.next(),i2.next()));
+        }
+        while(i1.hasNext()){
+            friendshipsRequests.add(new FriendshipDTO(i1.next(),""));
+        }
+        while(i2.hasNext()){
+            friendshipsRequests.add(new FriendshipDTO("",i2.next()));
+        }
+        return friendshipsRequests;
     }
 
     public void setService(NetworkService service, User user){
         super.init(service,user);
         modelGrade.setAll(getAllUsersList());
+        //modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+        for(UserDTO u :getAllUsersList())
+        {
+            String name = u.getName();
+            userComboBox.getItems().add(name);
+        }
     }
 
     @FXML
@@ -73,7 +134,6 @@ public class AllUsersController extends AbstractController {
                 controlPanel.setText(e.toString());
             }
         }
-
     }
 
     @FXML
@@ -95,8 +155,50 @@ public class AllUsersController extends AbstractController {
         }
     }
 
+    @FXML
+    public void addFriend(){
+        if(userComboBox.getSelectionModel().isEmpty()){
+            controlPanel.setText("You haven't selected any user yet!");
+        }
+        else{
+            UserDTO selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
+            User toBeFriendWith = service.findByName(userComboBox.getSelectionModel().getSelectedItem());
+            Long id = toBeFriendWith.getId();
+            try{
+                service.addFriendship(service.findByName(selectedUser.getName()).getId(),id,true);
+                controlPanel.setText("Friendship with "+ userComboBox.getSelectionModel().getSelectedItem() + " added successfully!");
+            }catch (RepoException e){
+                controlPanel.setText(e.toString());
+            }catch (Exception e){
+                controlPanel.setText("You haven't selected a user to deal with!");
+            }
+        }
+    }
+
+    @FXML
+    public void deleteFriend(){
+        if(userComboBox.getSelectionModel().isEmpty()){
+            controlPanel.setText("You haven't selected any user yet!");
+        }
+        else{
+            UserDTO selectedUser = tableViewUsers.getSelectionModel().getSelectedItem();
+            User toDeleteFriendship = service.findByName(userComboBox.getSelectionModel().getSelectedItem());
+            Long id = toDeleteFriendship.getId();
+            try{
+                service.deleteFriendship(service.findByName(selectedUser.getName()).getId(),id);
+                controlPanel.setText("Friendship with "+ userComboBox.getSelectionModel().getSelectedItem() + " deleted successfully!");
+            }catch (RepoException e){
+                controlPanel.setText(e.toString());
+            }catch (Exception e){
+                controlPanel.setText("You haven't selected a user to deal with!");
+            }
+        }
+    }
+
     @Override
     public void update() {
         modelGrade.setAll(getAllUsersList());
+        if(!userComboBox.getSelectionModel().isEmpty())
+            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
     }
 }
