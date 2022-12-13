@@ -10,11 +10,15 @@ public class UserValidator implements Validator<User> {
     public void validate(User entity) throws ValidationException {
         String error = "";
         if (entity.getId() < 0)
-            error += "Id invalid\n";
-        if (Objects.equals(entity.getLastName(), ""))
-            error += "Nume invalid\n";
-        if (Objects.equals(entity.getFirstName(), ""))
-            error += "Prenume invalid\n";
+            error += "Id is invalid!\n";
+        if (Objects.equals(entity.getLastName(), "")
+                || entity.getLastName().startsWith(" ")
+                || entity.getLastName().endsWith(" "))
+            error += "Last name is invalid!\n";
+        if (Objects.equals(entity.getFirstName(), "")
+                || entity.getFirstName().startsWith(" ")
+                || entity.getFirstName().endsWith(" "))
+            error += "First name is invalid!\n";
         if (!error.equals(""))
             throw new ValidationException(error);
     }

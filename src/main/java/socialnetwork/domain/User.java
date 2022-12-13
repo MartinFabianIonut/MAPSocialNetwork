@@ -46,13 +46,13 @@ public class User extends Entity<Long> {
         return friends.stream().map(Entity::getId).collect(Collectors.toList());
     }
 
+    public List<String> getFriendsAsString() {
+        return friends.stream().map(f -> f.getLastName()+" "+f.getFirstName()).collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
-        return "Utilizator{" +
-                "lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", friends=" + this.getFriendsIds() +
-                '}';
+        return  lastName + " " + firstName ;
     }
 
     @Override

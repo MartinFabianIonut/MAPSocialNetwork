@@ -1,26 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.AllUsersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.AllUsersController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="287.0" layoutX="67.0" layoutY="68.0" stroke="BLACK" strokeType="INSIDE" width="465.0" />
-      <Text fill="#631eeb" layoutX="129.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="670.0" layoutX="65.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" width="1070.0" />
+      <Text fill="#631eeb" layoutX="429.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
          <font>
             <Font name="Georgia Bold Italic" size="28.0" />
          </font>
       </Text>
-      <TableView fx:id="tableViewUsers" layoutX="72.0" layoutY="71.0" prefHeight="280.0" prefWidth="456.0">
+      <TableView fx:id="tableViewUsers" layoutX="90.0" layoutY="90.0" prefHeight="307.0" prefWidth="826.0">
         <columns>
-          <TableColumn fx:id="tableColumnId" prefWidth="70.0" text="Id User" />
-          <TableColumn fx:id="tableColumnName" prefWidth="211.0" text="User Name" />
-            <TableColumn fx:id="tableColumnFriends" prefWidth="173.0" text="Friends" />
+          <TableColumn fx:id="tableColumnId" prefWidth="58.0" text="Id User" />
+          <TableColumn fx:id="tableColumnName" prefWidth="269.0" text="User Name" />
+            <TableColumn fx:id="tableColumnFriends" prefWidth="493.0" text="Friends" />
         </columns>
       </TableView>
+      <Button fx:id="signOutButton" layoutX="994.0" layoutY="679.0" mnemonicParsing="false" onAction="#signOutAction" text="Sign out" />
+      <Text fill="WHITE" layoutX="942.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Control panel" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia Bold" size="23.0" />
+         </font>
+      </Text>
+      <TextField fx:id="firstNameField" layoutX="959.0" layoutY="228.0" />
+      <TextField fx:id="lastNameField" layoutX="959.0" layoutY="145.0" />
+      <Text fill="WHITE" layoutX="950.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last name:" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia" size="21.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="950.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First name:" wrappingWidth="168.13671875">
+         <font>
+            <Font name="Georgia" size="21.0" />
+         </font>
+      </Text>
+      <Button fx:id="addUserButton" layoutX="992.0" layoutY="300.0" mnemonicParsing="false" onAction="#addUserAction" text="Add user" />
+      <Button fx:id="deleteUserButton" layoutX="985.0" layoutY="347.0" mnemonicParsing="false" onAction="#deleteUserAction" text="Delete user" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d4eaff" height="186.0" layoutX="934.0" layoutY="489.0" stroke="BLACK" strokeType="INSIDE" width="185.0" />
+      <Text fx:id="controlPanel" layoutX="946.0" layoutY="511.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="158.9830722808838" />
+      <TableView fx:id="tableFriendRequests" layoutX="90.0" layoutY="464.0" prefHeight="253.0" prefWidth="611.0">
+         <columns>
+            <TableColumn fx:id="sendByMe" prefWidth="303.0" text="Send by me to" />
+            <TableColumn fx:id="receivedByMe" prefWidth="480.0" text="Received by me from" />
+         </columns>
+      </TableView>
+      <ComboBox fx:id="userComboBox" layoutX="90.0" layoutY="415.0" prefWidth="150.0" promptText="Choose user:" />
+      <Button fx:id="deleteFriendButton" layoutX="727.0" layoutY="549.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="32.0" prefWidth="89.0" text="Delete friend" />
+      <Button fx:id="addFriendButton" layoutX="727.0" layoutY="589.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="32.0" prefWidth="85.0" text="Add friend" />
    </children>
 </AnchorPane>

@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.AuthenticationController">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #82CAFF; -fx-opacity: .9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="socialnetwork.controllers.AuthenticationController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="287.0" layoutX="67.0" layoutY="68.0" stroke="BLACK" strokeType="INSIDE" width="465.0" />
-      <Text fill="#631eeb" layoutX="129.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4ca8ff" height="670.0" layoutX="65.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" width="1070.0" />
+      <Text fill="#631eeb" layoutX="429.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Social network by FIM" wrappingWidth="342.390625">
          <font>
             <Font name="Georgia Bold Italic" size="28.0" />
          </font>
       </Text>
-      <Text fill="#7400e8" layoutX="161.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AUTHENTIFICATION" wrappingWidth="277.04296875">
+      <Text fill="#7400e8" layoutX="461.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AUTHENTIFICATION" wrappingWidth="277.04296875">
          <font>
             <Font name="Georgia Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="adminButton" layoutX="139.0" layoutY="224.0" mnemonicParsing="false" onAction="#adminPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="ADMIN">
+      <Button fx:id="adminButton" layoutX="396.0" layoutY="400.0" mnemonicParsing="false" onAction="#adminPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="ADMIN" textFill="WHITE">
          <font>
-            <Font name="Georgia" size="20.0" />
+            <Font name="Georgia Bold" size="20.0" />
          </font></Button>
-      <Text fill="#7400e8" layoutX="204.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Continue as:" wrappingWidth="190.04296875">
+      <Text fill="#7400e8" layoutX="505.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Continue as:" wrappingWidth="190.04296875">
          <font>
             <Font name="Georgia Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="userButton" layoutX="329.0" layoutY="224.0" mnemonicParsing="false" onAction="#userPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="USER">
+      <Button fx:id="userButton" layoutX="695.0" layoutY="400.0" mnemonicParsing="false" onAction="#userPage" prefHeight="98.0" prefWidth="131.0" style="-fx-background-color: #82CAFF;" text="USER" textFill="WHITE">
          <font>
-            <Font name="Georgia" size="20.0" />
+            <Font name="Georgia Bold" size="20.0" />
          </font></Button>
+      <Button fx:id="submitAdminAccess" layoutX="867.0" layoutY="568.0" mnemonicParsing="false" onAction="#giveAdminAccess" prefHeight="25.0" prefWidth="100.0" text="Submit" />
+      <Text fx:id="passwordAdminAccess" fill="#7400e8" layoutX="132.0" layoutY="588.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="563.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="22.0" />
+         </font></Text>
+      <PasswordField fx:id="passwordAdminField" layoutX="714.0" layoutY="568.0" onAction="#giveAdminAccess" prefHeight="25.0" prefWidth="131.0" />
    </children>
 </AnchorPane>

@@ -91,9 +91,10 @@ public class InMemoryRepository0<ID, E extends Entity<ID>> implements Repository
         //entities.put(entity.getId(), entity);
         if (entities.get(entity.getId()) != null) {
             entities.put(entity.getId(), entity);
-            return null;
+            return entity;
         }
-        return entity;
+        return null;
+
     }
 
 }

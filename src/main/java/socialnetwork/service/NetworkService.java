@@ -6,11 +6,14 @@ import socialnetwork.domain.exceptions.RepoException;
 import socialnetwork.domain.exceptions.ValidationException;
 import socialnetwork.domain.graph.UndirectedGraph;
 import socialnetwork.domain.validators.Validator;
+import socialnetwork.observer.Observable;
+import socialnetwork.observer.Observer;
 import socialnetwork.repository.Repository0;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
-public class NetworkService {
+public class NetworkService implements Observable {
     private final Repository0<Long, User> repoUsers;
     private final Repository0<Long, Friendship> repoFriendships;
 
@@ -36,12 +39,16 @@ public class NetworkService {
         return repoUsers.findAll();
     }
 
-    public User findByName(String name) throws RepoException{
+    public Iterable<Friendship> getAllFriendships() {
+        return repoFriendships.findAll();
+    }
+
+
+    public User findByName(String name) throws RepoException {
         Iterable<User> allUsers = getAllUsers();
         User user = null;
-        for(User u: allUsers){
-            if((u.getLastName() + " " + u.getFirstName()).equals(name))
-            {
+        for (User u : allUsers) {
+            if ((u.getLastName() + " " + u.getFirstName()).equals(name)) {
                 user = repoUsers.findOne(u.getId());
                 break;
             }
@@ -64,14 +71,15 @@ public class NetworkService {
         for (User u : users) {
             if (u.getId() > maxi)
                 maxi = u.getId();
-            if(Objects.equals(u.getLastName(), lastName) && Objects.equals(u.getFirstName(), firstName))
+            if (Objects.equals(u.getLastName(), lastName) && Objects.equals(u.getFirstName(), firstName))
                 exist = true;
         }
-        if(exist)
+        if (exist)
             throw new RepoException("This user already exists");
         user.setId(maxi + 1);
         validatorUser.validate(user);
         repoUsers.save(user);
+        notifyObservers();
     }
 
     /**
@@ -87,6 +95,7 @@ public class NetworkService {
             repoFriendships.delete(friendship.getId());
         for (User userSearch : repoUsers.findAll())
             userSearch.getFriends().remove(user);
+        notifyObservers();
     }
 
     /**
@@ -109,14 +118,24 @@ public class NetworkService {
      * @param id2 id of second user, I want to add friendship between him and first user, identified by id1
      * @throws RepoException if they were already friends or if same person
      */
-    public void addFriendship(Long id1, Long id2) throws RepoException, ValidationException {
+    public void addFriendship(Long id1, Long id2, boolean admin) throws RepoException, ValidationException {
         User[] users = getTwoUsersById(id1, id2);
         User u1 = users[0];
         User u2 = users[1];
         if (u1 != u2) {
             if (alreadyFriends(u1, u2))
-                throw new RepoException(u1 + " is already a friend of " + u2);
-            Friendship friendship = new Friendship(u1, u2);
+                if(!admin)
+                    throw new RepoException(u1 + " is already a friend of " + u2 + "!");
+                else
+                {
+                    acceptFriendship(u2,u1);
+                    return;
+                }
+            Friendship friendship;
+            if(admin)
+                friendship = new Friendship(LocalDateTime.now(),u1,u2,"accepted");
+            else
+                friendship = new Friendship(u1, u2);
             validatorFriendship.validate(friendship);
             Iterable<Friendship> friendships = repoFriendships.findAll();
             Long maxi = 0L;
@@ -126,12 +145,45 @@ public class NetworkService {
             }
             friendship.setId(maxi + 1);
             repoFriendships.save(friendship);
+
             u1.getFriends().add(u2);
             u2.getFriends().add(u1);
             repoUsers.update(u1);
             repoUsers.update(u2);
+
+            notifyObservers();
         } else {
-            throw new RepoException("Same user, no efect");
+            throw new RepoException("Same user, no efect!");
+        }
+    }
+
+    public void acceptFriendship(User u1, User u2) throws RepoException{
+        Iterable<Friendship> friendshipIterable = getAllFriendships();
+        for (Friendship f : friendshipIterable) {
+            if (f.getFirstFriend() == u2 && f.getSecondFriend() == u1) {
+                if (Objects.equals(f.getStatus(), "accepted")) {
+                    throw new RepoException("Already friends!");
+                } else {
+                    f.setStatus("accepted");
+                    repoFriendships.update(f);
+                    notifyObservers();
+                }
+            }
+        }
+    }
+
+    public void refuseFriendship(User u1, User u2) throws RepoException{
+        Iterable<Friendship> friendshipIterable = getAllFriendships();
+        for (Friendship f : friendshipIterable) {
+            if (f.getFirstFriend() == u2 && f.getSecondFriend() == u1) {
+                if (Objects.equals(f.getStatus(), "accepted")) {
+                    throw new RepoException("Already friends!");
+                } else {
+                    deleteFriendship(u1.getId(),u2.getId());
+                    notifyObservers();
+                    break;
+                }
+            }
         }
     }
 
@@ -169,14 +221,16 @@ public class NetworkService {
                 for (Friendship f : repoFriendships.findAll()) {
                     Long idf1 = f.getFirstFriendId();
                     Long idf2 = f.getSecondFriendId();
-                    if ((idf1 == id1 && idf2 == id2) || (idf1 == id2 && idf2 == id1)) {
+                    if ((Objects.equals(idf1, id1) && Objects.equals(idf2, id2)) ||
+                            (Objects.equals(idf1, id2) && Objects.equals(idf2, id1))) {
                         repoFriendships.delete(f.getId());
+                        notifyObservers();
                         break;
                     }
                 }
-            } else throw new RepoException(u1 + " nu a fost prieten cu " + u2);
+            } else throw new RepoException(u1 + " was never a friend of " + u2 + "!");
         } else {
-            throw new RepoException("Same user, no efect");
+            throw new RepoException("Same user, no efect!");
         }
     }
 
@@ -219,5 +273,13 @@ public class NetworkService {
         return graph.getConnectedComponentsCount();
     }
 
+    @Override
+    public void addObserver(Observer e) {
+        observers.add(e);
+    }
+    @Override
+    public void notifyObservers() {
+        observers.forEach(Observer::update);
+    }
 }
 
