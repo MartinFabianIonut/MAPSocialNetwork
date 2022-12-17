@@ -6,8 +6,7 @@ import socialnetwork.domain.validators.Validator;
 import socialnetwork.repository.Repository0;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryRepository0<ID, E extends Entity<ID>> implements Repository0<ID, E> {
 
@@ -55,8 +54,9 @@ public class InMemoryRepository0<ID, E extends Entity<ID>> implements Repository
             throw new IllegalArgumentException("entity must be not null");
         validator.validate(entity);
         if (entities.get(entity.getId()) != null) {
+            //entities.put(entity.getId(), entity);
             return entity;
-        } else entities.put(entity.getId(), entity);//, showfriendships.put(entity,u.getFriends());
+        } else entities.put(entity.getId(), entity);
         return null;
     }
 
@@ -95,6 +95,11 @@ public class InMemoryRepository0<ID, E extends Entity<ID>> implements Repository
         }
         return null;
 
+    }
+
+    @Override
+    public void clearMemory(){
+        entities.clear();
     }
 
 }

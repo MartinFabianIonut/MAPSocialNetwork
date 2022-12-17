@@ -27,7 +27,6 @@ public interface Repository0<ID, E extends Entity<ID>> {
      */
     default void loadData() {
     }
-    // void loadData();
 
     /**
      * @return all entities
@@ -62,5 +61,6 @@ public interface Repository0<ID, E extends Entity<ID>> {
      */
     E update(E entity);
 
+    void clearMemory();
 }
 

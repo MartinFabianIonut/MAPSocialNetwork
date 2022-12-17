@@ -1,5 +1,5 @@
 package socialnetwork.controllers;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,10 +13,10 @@ import socialnetwork.domain.exceptions.RepoException;
 
 import java.io.IOException;
 
-public class LogInController extends AbstractController{
+public class LogInController extends AbstractController {
     public javafx.scene.text.Text messageText;
     @FXML
-    Text lastNameText,firstNameText;
+    Text lastNameText, firstNameText;
     @FXML
     Button signUpButton, logInButton, signOutButton, createButton;
     @FXML
@@ -26,31 +26,30 @@ public class LogInController extends AbstractController{
     AnchorPane anchorPane;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         anchorPane.setVisible(false);
     }
+
     @FXML
     public void logIn() throws IOException {
         User user = service.findByName(nameField.getText());
-        if(user!=null)
-        {
+        if (user != null) {
             this.currentUser = user;
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/userView.fxml"));
             AnchorPane root = loader.load();
 
             UserController controller = loader.getController();
-            controller.setService(service,user);
+            controller.setService(service, user);
 
             Stage previousStage = (Stage) logInButton.getScene().getWindow();
             previousStage.close();
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 1200, 800));
-            stage.setTitle("Wow window");
+            stage.setTitle(user.getLastName() + " " + user.getFirstName() + " window");
             stage.show();
-        }
-        else {
+        } else {
             logInButton.setText("No such");
         }
     }
@@ -66,26 +65,26 @@ public class LogInController extends AbstractController{
     }
 
     @Override
-    public void update() {}
+    public void update() {
+    }
 
     public void createAccount() {
         String lastName = lastNameField.getText();
         String firstName = firstNameField.getText();
-        if(lastName.isEmpty() || firstName.isEmpty()) {
+        if (lastName.isEmpty() || firstName.isEmpty()) {
             if (firstName.isEmpty() && lastName.isEmpty())
                 messageText.setText("Last and first name field is empty!");
-            else{
+            else {
                 if (lastName.isEmpty())
                     messageText.setText("Last name field is empty!");
                 if (firstName.isEmpty())
                     messageText.setText("First name field is empty!");
             }
-        }
-        else {
+        } else {
             try {
-                service.addUser(lastName,firstName);
-                messageText.setText("User "+lastName+ " "+firstName+" added successfully! Now, you can log in into your account!");
-            }catch (RepoException e){
+                service.addUser(lastName, firstName);
+                messageText.setText("User " + lastName + " " + firstName + " added successfully! Now, you can log in into your account!");
+            } catch (RepoException e) {
                 messageText.setText(e.toString());
             }
         }

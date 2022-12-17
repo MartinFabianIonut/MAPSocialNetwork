@@ -67,34 +67,6 @@ public class AllUsersController extends AbstractController {
             modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
     }
 
-    private List<FriendshipDTO> getAllFriendshipRequests(){
-        Iterable<Friendship> list =  service.getAllFriendships();
-        User selectedUser = service.findByName(userComboBox.getSelectionModel().getSelectedItem());
-        if(selectedUser==null)
-            return null;
-        List<String> sendByMe = StreamSupport.stream(list.spliterator(), false)
-                .filter((x) -> (Objects.equals(x.getFirstFriendId(), selectedUser.getId())))
-                .map(f -> f.getSecondFriend().getLastName() + " " + f.getSecondFriend().getFirstName() + "; " +
-                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
-        List<String> receivedByMe = StreamSupport.stream(list.spliterator(), false)
-                .filter((x) -> (Objects.equals(x.getSecondFriendId(), selectedUser.getId())))
-                .map(f -> f.getFirstFriend().getLastName() + " " + f.getFirstFriend().getFirstName() + "; " +
-                        "in: " + f.getDate().toString() + "; status = " + f.getStatus()).toList();
-        Iterator<String> i1 = sendByMe.iterator();
-        Iterator<String> i2 = receivedByMe.iterator();
-        List<FriendshipDTO> friendshipsRequests = new ArrayList<>();
-        while(i1.hasNext() && i2.hasNext()){
-            friendshipsRequests.add(new FriendshipDTO(i1.next(),i2.next()));
-        }
-        while(i1.hasNext()){
-            friendshipsRequests.add(new FriendshipDTO(i1.next(),""));
-        }
-        while(i2.hasNext()){
-            friendshipsRequests.add(new FriendshipDTO("",i2.next()));
-        }
-        return friendshipsRequests;
-    }
-
     public void setService(NetworkService service, User user){
         super.init(service,user);
         modelGrade.setAll(getAllUsersList());

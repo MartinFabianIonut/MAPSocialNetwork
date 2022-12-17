@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -34,25 +35,59 @@
         </font>
     </Text>
     <ComboBox fx:id="comboBoxOptions" layoutX="975.0" layoutY="89.0" prefHeight="32.0" prefWidth="124.0" promptText="Options" />
-    <Text fill="WHITE" layoutX="972.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected user:">
+    <Text fill="WHITE" layoutX="974.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected user:">
         <font>
           <Font name="Georgia Bold" size="18.0" />
         </font>
     </Text>
-    <Text fx:id="showSelectedUser" layoutX="972.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
+    <Text fx:id="showSelectedUser" layoutX="974.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
         <font>
           <Font name="Georgia Bold" size="15.0" />
         </font>
     </Text>
-    <Button fx:id="deleteFriendButton" layoutX="994.0" layoutY="388.0" mnemonicParsing="false" onAction="#deleteFriend" text="Delete friend" />
-    <Button fx:id="acceptFriendshipButton" layoutX="975.0" layoutY="166.0" mnemonicParsing="false" onAction="#acceptFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Accept friendship" />
-    <Button fx:id="addFriendButton" layoutX="994.0" layoutY="426.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="25.0" prefWidth="85.0" text="Add friend" />
-    <Text fx:id="showResult" layoutX="972.0" layoutY="488.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
+    <Button fx:id="deleteFriendButton" layoutX="994.0" layoutY="451.0" mnemonicParsing="false" onAction="#deleteFriend" text="Delete friend" />
+    <Button fx:id="addFriendButton" layoutX="994.0" layoutY="489.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="25.0" prefWidth="85.0" text="Add friend" />
+    <Text fx:id="showResult" layoutX="972.0" layoutY="545.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
         <font>
           <Font name="Georgia Italic" size="15.0" />
         </font>
     </Text>
     <Button fx:id="signOutButton" layoutX="1006.0" layoutY="684.0" mnemonicParsing="false" onAction="#signOutAction" text="Sign out" />
-    <Button fx:id="refuseFriendshipButton" layoutX="975.0" layoutY="201.0" mnemonicParsing="false" onAction="#refuseFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Refuse friendship" />
    <Button fx:id="deleteAccountButton" layoutX="1039.0" layoutY="743.0" mnemonicParsing="false" onAction="#deleteAccountAction" text="Delete account" />
+   <Button fx:id="refreshButton" layoutX="38.0" layoutY="18.0" mnemonicParsing="false" onAction="#refresh" style="-fx-background-color: #4ca8ff;" text="Refresh" />
+   <AnchorPane fx:id="anchorRequests" layoutX="927.0" layoutY="189.0" prefHeight="241.0" prefWidth="200.0">
+      <children>
+         <Button fx:id="cancelFriendshipButton" layoutX="47.0" layoutY="195.0" mnemonicParsing="false" onAction="#cancelFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Cancel friendship" />
+          <Button fx:id="acceptFriendshipButton" layoutX="47.0" layoutY="44.0" mnemonicParsing="false" onAction="#acceptFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Accept friendship" />
+          <Button fx:id="refuseFriendshipButton" layoutX="47.0" layoutY="80.0" mnemonicParsing="false" onAction="#refuseFriendshipAction" prefHeight="25.0" prefWidth="124.0" text="Refuse friendship" />
+         <Text fx:id="selectedUserByMeText" fill="WHITE" layoutX="32.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected user (send by me to):" wrappingWidth="154.7939453125">
+            <font>
+               <Font name="Georgia Bold" size="18.0" />
+            </font>
+         </Text>
+         <Text fx:id="showSelectedUserByMe" layoutX="44.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.64746093750023">
+            <font>
+               <Font name="Georgia Bold" size="15.0" />
+            </font>
+         </Text>
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="anchorMessages" layoutX="51.0" layoutY="51.0" prefHeight="659.0" prefWidth="914.0">
+      <children>
+         <TableView fx:id="tableMessages" layoutX="39.0" layoutY="100.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="241.0" prefWidth="826.0">
+           <columns>
+             <TableColumn fx:id="received" editable="false" prefWidth="416.0" sortable="false" text="Received" />
+             <TableColumn fx:id="sent" editable="false" prefWidth="409.0" sortable="false" text="Sent" />
+           </columns>
+         </TableView>
+         <ComboBox fx:id="userComboBox" layoutX="39.0" layoutY="39.0" prefWidth="150.0" promptText="Choose friend:" />
+         <Text fill="WHITE" layoutX="87.0" layoutY="439.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your message:">
+            <font>
+               <Font name="Georgia Bold" size="18.0" />
+            </font>
+         </Text>
+         <TextField fx:id="messageField" layoutX="303.0" layoutY="420.0" onAction="#sendMessageAction" />
+         <Button fx:id="sendMessageButton" layoutX="303.0" layoutY="462.0" mnemonicParsing="false" onAction="#sendMessageAction" text="Send message" />
+      </children>
+   </AnchorPane>
 </AnchorPane>

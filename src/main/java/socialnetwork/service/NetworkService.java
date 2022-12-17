@@ -1,6 +1,7 @@
 package socialnetwork.service;
 
 import socialnetwork.domain.Friendship;
+import socialnetwork.domain.Message;
 import socialnetwork.domain.User;
 import socialnetwork.domain.exceptions.RepoException;
 import socialnetwork.domain.exceptions.ValidationException;
@@ -16,20 +17,27 @@ import java.util.*;
 public class NetworkService implements Observable {
     private final Repository0<Long, User> repoUsers;
     private final Repository0<Long, Friendship> repoFriendships;
+    private final Repository0<Long, Message> repoMessages;
 
     private final Validator<User> validatorUser;
     private final Validator<Friendship> validatorFriendship;
+    private final Validator<Message> validatorMessage;
 
     public NetworkService(Repository0<Long, User> repoUsers,
                           Repository0<Long, Friendship> repoFriendships,
+                          Repository0<Long, Message> repoMessages,
                           Validator<User> validatorUser,
-                          Validator<Friendship> validatorFriendship) {
+                          Validator<Friendship> validatorFriendship,
+                          Validator<Message> validatorMessage) {
         this.repoUsers = repoUsers;
         this.repoUsers.loadData();
         this.repoFriendships = repoFriendships;
         this.repoFriendships.loadData();
+        this.repoMessages = repoMessages;
+        this.repoMessages.loadData();
         this.validatorUser = validatorUser;
         this.validatorFriendship = validatorFriendship;
+        this.validatorMessage = validatorMessage;
     }
 
     /**
@@ -37,6 +45,21 @@ public class NetworkService implements Observable {
      */
     public Iterable<User> getAllUsers() {
         return repoUsers.findAll();
+    }
+    /**
+     * @return all existing messages
+     */
+    public Iterable<Message> getAllMessages() {
+        return repoMessages.findAll();
+    }
+
+    public void refreshService(){
+        repoUsers.clearMemory();
+        repoUsers.loadData();
+        repoFriendships.clearMemory();
+        repoFriendships.loadData();
+        repoMessages.clearMemory();
+        repoMessages.loadData();
     }
 
     public Iterable<Friendship> getAllFriendships() {
@@ -55,6 +78,10 @@ public class NetworkService implements Observable {
         }
         return user;
         //throw new RepoException("Non existing user!");
+    }
+
+    public User findOne(Long id) throws RepoException{
+        return  repoUsers.findOne(id);
     }
 
     /**
@@ -175,7 +202,10 @@ public class NetworkService implements Observable {
     public void refuseFriendship(User u1, User u2) throws RepoException{
         Iterable<Friendship> friendshipIterable = getAllFriendships();
         for (Friendship f : friendshipIterable) {
-            if (f.getFirstFriend() == u2 && f.getSecondFriend() == u1) {
+            User firstFriend, secondFriend;
+            firstFriend = f.getFirstFriend();
+            secondFriend = f.getSecondFriend();
+            if (firstFriend == u2 && secondFriend == u1) {
                 if (Objects.equals(f.getStatus(), "accepted")) {
                     throw new RepoException("Already friends!");
                 } else {
@@ -224,6 +254,17 @@ public class NetworkService implements Observable {
                     if ((Objects.equals(idf1, id1) && Objects.equals(idf2, id2)) ||
                             (Objects.equals(idf1, id2) && Objects.equals(idf2, id1))) {
                         repoFriendships.delete(f.getId());
+                        Iterable<Message> allMessages = repoMessages.findAll();
+                        List<Long>listIdsMessagesToBeDeleted = new ArrayList<>();
+                        for(Message m: allMessages)
+                        {
+                            if((m.getFrom()==id1.intValue() && m.getTo()==id2.intValue())
+                            || (m.getTo()==id1.intValue() && m.getFrom()==id2.intValue()))
+                                listIdsMessagesToBeDeleted.add(m.getId());
+                        }
+                        for (Long id: listIdsMessagesToBeDeleted){
+                            repoMessages.delete(id);
+                        }
                         notifyObservers();
                         break;
                     }
@@ -232,6 +273,20 @@ public class NetworkService implements Observable {
         } else {
             throw new RepoException("Same user, no efect!");
         }
+    }
+
+    public void sendMessage(Long idSender, Long idReceiver, String messageToSend){
+        Message message = new Message(messageToSend,idSender.intValue(),idReceiver.intValue());
+        Iterable<Message> messages = repoMessages.findAll();
+        Long maxi = 0L;
+        for (Message m : messages) {
+            if (m.getId() > maxi)
+                maxi = m.getId();
+        }
+        message.setId(maxi + 1);
+        validatorMessage.validate(message);
+        repoMessages.save(message);
+        notifyObservers();
     }
 
     /**

@@ -16,4 +16,7 @@ module socialnetwork {
     exports socialnetwork.service;
     exports socialnetwork.observer;
     exports socialnetwork.domain.exceptions;
+    exports socialnetwork.domain.validators;
+    exports socialnetwork.repository.database;
+    exports socialnetwork.repository;
 }
