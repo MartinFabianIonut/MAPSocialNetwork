@@ -12,6 +12,8 @@ import socialnetwork.domain.User;
 import socialnetwork.domain.exceptions.RepoException;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LogInController extends AbstractController {
     public javafx.scene.text.Text messageText;
@@ -49,6 +51,13 @@ public class LogInController extends AbstractController {
             stage.setScene(new Scene(root, 1200, 800));
             stage.setTitle(user.getLastName() + " " + user.getFirstName() + " window");
             stage.show();
+
+//            new Timer().scheduleAtFixedRate(new TimerTask() {
+//                public void run() {
+//                    controller.refresh();
+//                    // Here comes your void to refresh the whole application.
+//                }
+//            }, 4000, 2000);
         } else {
             logInButton.setText("No such");
         }

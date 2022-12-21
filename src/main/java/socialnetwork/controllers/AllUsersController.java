@@ -64,13 +64,15 @@ public class AllUsersController extends AbstractController {
     private void handleFilter(){
         String selectedItem = userComboBox.getSelectionModel().getSelectedItem();
         if(selectedItem!=null)
-            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+        {
+            User selectedUser = service.findByName(selectedItem);
+            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests(selectedUser));
+        }
     }
 
     public void setService(NetworkService service, User user){
         super.init(service,user);
         modelGrade.setAll(getAllUsersList());
-        //modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
         for(UserDTO u :getAllUsersList())
         {
             String name = u.getName();
@@ -171,6 +173,10 @@ public class AllUsersController extends AbstractController {
     public void update() {
         modelGrade.setAll(getAllUsersList());
         if(!userComboBox.getSelectionModel().isEmpty())
-            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+        {
+            String selectedItem = userComboBox.getSelectionModel().getSelectedItem();
+            User selectedUser = service.findByName(selectedItem);
+            modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests(selectedUser));
+        }
     }
 }

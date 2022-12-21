@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 public class UserController extends AbstractController {
@@ -115,7 +116,7 @@ public class UserController extends AbstractController {
         super.init(service, user);
         modelGradeUserDTO.setAll(getAllUsersList());
         modelGradeFriendshipDTO.setAll(getAllFriendshipsForThisUser());
-        modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+        modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests(currentUser));
         String friend = userComboBox.getSelectionModel().getSelectedItem();
         if (friend != null)
             modelGradeMessages.setAll(getAllMessagesForThisUserWithParticularFriend(friend));
@@ -192,14 +193,8 @@ public class UserController extends AbstractController {
         if (friend != null) {
             Iterable<Message> list = service.getAllMessages();
             User userFriend = service.findByName(friend);
-            List<String> sent = StreamSupport.stream(list.spliterator(), false)
-                    .filter((x) -> (Objects.equals(x.getFrom(), currentUser.getId().intValue())
-                            && x.getTo() == userFriend.getId().intValue()))
-                    .map(f -> f.getId().toString() + ";;" + f.getMessage()).toList();
-            List<String> received = StreamSupport.stream(list.spliterator(), false)
-                    .filter((x) -> (Objects.equals(x.getTo(), currentUser.getId().intValue())
-                            && x.getFrom() == userFriend.getId().intValue()))
-                    .map(f -> f.getId().toString() + ";;" + f.getMessage()).toList();
+            List<String> sent = getMessages(list, userFriend, Message::getFrom, Message::getTo);
+            List<String> received = getMessages(list, userFriend, Message::getTo, Message::getFrom);
             List<MessageDTO> messages = new ArrayList<>();
             int i1 = 0, i2 = 0;
             int id1, id2;
@@ -230,6 +225,15 @@ public class UserController extends AbstractController {
             return messages;
         }
         return null;
+    }
+
+    private List<String> getMessages(Iterable<Message> list, User userFriend,
+                                     Function<Message, Integer> receiverIdProvider,
+                                     Function<Message, Integer> senderIdProvider) {
+        return StreamSupport.stream(list.spliterator(), false)
+                .filter((x) -> (Objects.equals(receiverIdProvider.apply(x), currentUser.getId().intValue())
+                        && senderIdProvider.apply(x) == userFriend.getId().intValue()))
+                .map(f -> f.getId().toString() + ";;" + f.getMessage()).toList();
     }
 
 
@@ -270,7 +274,7 @@ public class UserController extends AbstractController {
     @FXML
     public void showUserTableAllUsers() {
         UserDTO user = tableAllUsers.getSelectionModel().getSelectedItem();
-        if(user!=null)
+        if (user != null)
             showSelectedUser.setText(user.getName());
     }
 
@@ -373,6 +377,7 @@ public class UserController extends AbstractController {
         }
     }
 
+
     @FXML
     public void refresh() {
         service.refreshService();
@@ -383,7 +388,7 @@ public class UserController extends AbstractController {
     public void update() {
         modelGradeUserDTO.setAll(getAllUsersList());
         modelGradeFriendshipDTO.setAll(getAllFriendshipsForThisUser());
-        modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests());
+        modelGradeFriendshipDTORequests.setAll(getAllFriendshipRequests(currentUser));
         String friend = userComboBox.getSelectionModel().getSelectedItem();
         if (friend != null)
             modelGradeMessages.setAll(getAllMessagesForThisUserWithParticularFriend(friend));

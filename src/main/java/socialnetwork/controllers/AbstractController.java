@@ -41,7 +41,7 @@ public abstract class AbstractController implements Observer {
         return users;
     }
 
-    protected List<FriendshipDTO> getAllFriendshipRequests() {
+    protected List<FriendshipDTO> getAllFriendshipRequests(User currentUser) {
         Iterable<Friendship> list = service.getAllFriendships();
         List<String> sendByMe = StreamSupport.stream(list.spliterator(), false)
                 .filter((x) -> (Objects.equals(x.getFirstFriendId(), currentUser.getId())))

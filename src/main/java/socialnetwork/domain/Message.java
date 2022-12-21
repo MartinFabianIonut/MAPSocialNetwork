@@ -3,31 +3,19 @@ package socialnetwork.domain;
 import java.util.Objects;
 
 public class Message extends Entity<Long>{
-    private String message;
-    private Integer from, to;
+    private final String message;
+    private final Integer from, to;
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public Integer getFrom() {
         return from;
     }
 
-    public void setFrom(Integer from) {
-        this.from = from;
-    }
-
     public Integer getTo() {
         return to;
-    }
-
-    public void setTo(Integer to) {
-        this.to = to;
     }
 
     public Message(String message, Integer from, Integer to) {
